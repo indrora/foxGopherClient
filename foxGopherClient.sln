@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "foxGopherClient", "foxGopherClient\foxGopherClient.csproj", "{F0991151-87EC-43FF-A864-40F495A2BFD3}"
 EndProject
 Global
