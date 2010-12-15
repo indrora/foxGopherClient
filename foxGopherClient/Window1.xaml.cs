@@ -82,14 +82,14 @@ namespace foxGopherClient
                 if (hr < 0)
                 {
                     //DwmExtendFrameIntoClientArea Failed
-                    MessageBox.Show("I was unable to make DwmExtendFrameIntoClientArea work!");
+                    // We're either on a basic system or we've no idea what's going on.
                 }
                 else
                 {
                     this.Background = Brushes.Transparent;
                     navBar.Background = Brushes.Transparent;
                     sBar.Background = Brushes.Transparent;
-                    MessageBox.Show("DWMExtendFrameINtoClientArea Succeeded");
+                    // We're ona Vista box or something else that supports DWM.
                 }
             }
             catch
@@ -267,11 +267,6 @@ namespace foxGopherClient
             cLocation = Location; // = ur.GetLeftPart(UriPartial.Query);
 
 
-            //myLines.Clear();
-            //foreach (var line in lines)
-            //{
-            //    myLines.Add(new gopherLine(line));
-            //}
             if (myLines.Count > 0)
             {
                 ResultsList.ScrollIntoView(ResultsList.Items[0]);
@@ -511,6 +506,24 @@ namespace foxGopherClient
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("TODO: Implement printing");
+        }
+
+        /// <summary>
+        /// Determines if a Gopher page should be retrived from cache.
+        /// </summary>
+        /// <param name="domain">Domain of the request</param>
+        /// <param name="request">Actual path of the request (Truncated at ?)</param>
+        /// <returns></returns>
+        private bool shouldGetCachedVersion(string domain, string request)
+        {
+
+
+            // What this does is checks that there is/isn't a cached version available.
+
+            
+
+
+            return true;
         }
 
     }
