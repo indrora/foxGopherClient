@@ -11,6 +11,7 @@ using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace NetGopherClient
 {
@@ -21,14 +22,13 @@ namespace NetGopherClient
     {
         #region "Private Properties"
 
-        ObservableCollection<gopherLine> clientReceivedLines =
-            new ObservableCollection<gopherLine>();
-
         string _location = "";
 
         List<String> bookmarks = new List<string>();
 
         private GopherClient Gopher { get; }
+
+        private IUserInterface UserInterface { get; }
 
         #endregion
 
@@ -40,9 +40,10 @@ namespace NetGopherClient
 
             this.NavigationService.Navigating += NavigationService_Navigating;
 
-            ResultsList.DataContext = clientReceivedLines;
+            UserInterface = this;
+            Gopher = new GopherClient(UserInterface);
 
-            Gopher = new GopherClient(ref clientReceivedLines, this);
+            ResultsList.DataContext = Gopher.ReceivedLines;
         }
 
         private void WindowLoad(object Sender, RoutedEventArgs e)
@@ -83,7 +84,7 @@ namespace NetGopherClient
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("TODO: Implement printing");
+            UserInterface.DisplayMessage("TODO: Implement printing");
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -91,7 +92,7 @@ namespace NetGopherClient
             this.Title = ".NET Gopher Client";
             navigate(NavigationURL.Text, true);
 
-            //gopherLine gl = new gopherLine(@"1Initial server request: " + browserLocation.Text);
+            //GopherLine gl = new GopherLine(@"1Initial server request: " + browserLocation.Text);
         }
 
         public void UpdateStatus(string text)
@@ -101,7 +102,7 @@ namespace NetGopherClient
 
         public void DisplayMessage(string text, string title = "Alert")
         {
-            MessageBox.Show(text, title);
+            UserInterface.DisplayMessage(text, title);
         }
 
         public bool RequestYesNo(string text, string title = "Alert")
@@ -116,12 +117,12 @@ namespace NetGopherClient
             return false;
         }
 
-        public void UpdateMenu(IEnumerable<gopherLine> items)
+        public void UpdateMenu(IEnumerable<GopherLine> items)
         {
-            clientReceivedLines.Clear();
-            foreach (gopherLine item in items)
+            Gopher.ReceivedLines.Clear();
+            foreach (GopherLine item in items)
             {
-                clientReceivedLines.Add(item);
+                Gopher.ReceivedLines.Add(item);
             }
         }
 
@@ -169,7 +170,7 @@ namespace NetGopherClient
                 {
                     // Someone screwed up their URI requestor. We're going to have to fix it. 
                     //Location = Location.Substring(Location.IndexOf("://") + 3);
-                    MessageBox.Show("Invalid URI Scheme. Try Gopher:// instead");
+                    UserInterface.DisplayMessage("Invalid URI Scheme. Try Gopher:// instead");
                 }
                 location = "gopher://" + location;
             }
@@ -183,7 +184,7 @@ namespace NetGopherClient
             }
             catch
             {
-                MessageBox.Show("Invalid location!");
+                UserInterface.DisplayMessage("Invalid location!");
                 return;
             }
 
@@ -197,7 +198,7 @@ namespace NetGopherClient
             this.Title = ".NET Gopher Client: " + ur.GetLeftPart(UriPartial.Query);
 
             System.Net.Sockets.TcpClient tcpC = null;
-            clientReceivedLines.Clear();
+            Gopher.ReceivedLines.Clear();
             Refresh(this);
 
 
@@ -209,7 +210,7 @@ namespace NetGopherClient
 
                 if (addresses.Length == 0)
                 {
-                    // myLines.Add(new gopherLine("3Could not look up host...\terror\terror.host\t0"));
+                    // myLines.Add(new GopherLine("3Could not look up host...\terror\terror.host\t0"));
                     UpdateStatus("Host not found");
                     return;
                 }
@@ -221,7 +222,7 @@ namespace NetGopherClient
             }
 
 
-            //myLines.Add(new gopherLine("iEstablishing connection to host...\terror\terror.host\t0")); Refresh(this);
+            //myLines.Add(new GopherLine("iEstablishing connection to host...\terror\terror.host\t0")); Refresh(this);
             UpdateStatus("Connecting to " + ur.DnsSafeHost);
             try
             {
@@ -229,15 +230,15 @@ namespace NetGopherClient
             }
             catch
             {
-                //myLines.Add(new gopherLine("3Could not connect to host...\terror\terror.host\t0")); Refresh(this);
+                //myLines.Add(new GopherLine("3Could not connect to host...\terror\terror.host\t0")); Refresh(this);
                 UpdateStatus("Could not connect to " + ur.DnsSafeHost);
                 return;
             }
-            //myLines.Add(new gopherLine("iGetting the stream...\terror\terror.host\t0")); Refresh(this);
+            //myLines.Add(new GopherLine("iGetting the stream...\terror\terror.host\t0")); Refresh(this);
             System.Net.Sockets.NetworkStream ConnStream = tcpC.GetStream();
             if (ConnStream.CanWrite == false)
             {
-                // myLines.Add(new gopherLine("3Unable to use connection stream... network error?\terror\terror.host\t0")); Refresh(this);
+                // myLines.Add(new GopherLine("3Unable to use connection stream... network error?\terror\terror.host\t0")); Refresh(this);
                 UpdateStatus("Unable to connect");
                 return;
             }
@@ -254,11 +255,11 @@ namespace NetGopherClient
             string tString = inStream.ReadLine();
             if (tString == ".")
             {
-                //myLines.Add(new gopherLine("3Host sent bad EOF. Contact the server maintainer.\terror\terror.host\t0")); Refresh();
+                //myLines.Add(new GopherLine("3Host sent bad EOF. Contact the server maintainer.\terror\terror.host\t0")); Refresh();
                 UpdateStatus("Error while reciving data");
                 return;
             }
-            clientReceivedLines.Clear();
+            Gopher.ReceivedLines.Clear();
             Refresh(this);
             do
             {
@@ -266,24 +267,24 @@ namespace NetGopherClient
                 {
                     if (tString != null)
                     {
-                        clientReceivedLines.Add(new gopherLine(tString));
+                        Gopher.ReceivedLines.Add(new GopherLine(tString));
 
-                        UpdateStatus("Received " + clientReceivedLines.Count + " Selectors");
+                        UpdateStatus("Received " + Gopher.ReceivedLines.Count + " Selectors");
                         Refresh(this);
                     }
                 }
                 catch
                 {
-                    clientReceivedLines.Clear();
-                    clientReceivedLines.Add(new gopherLine("3Recived bad selector.\txxx\txxx\t0"));
-                    clientReceivedLines.Add(new gopherLine("3Errenous line: " + tString.Replace('\t', '^') + "\txx\txx\t0"));
+                    Gopher.ReceivedLines.Clear();
+                    Gopher.ReceivedLines.Add(new GopherLine("3Recived bad selector.\txxx\txxx\t0"));
+                    Gopher.ReceivedLines.Add(new GopherLine("3Errenous line: " + tString.Replace('\t', '^') + "\txx\txx\t0"));
                     UpdateStatus("Error while reciving data");
                     ResultsList.ScrollIntoView(ResultsList.Items[0]);
                     return;
                 }
                 tString = inStream.ReadLine();
             } while (tString != "." && tString != null);
-            UpdateStatus("Done with " + clientReceivedLines.Count + " selectors");
+            UpdateStatus("Done with " + Gopher.ReceivedLines.Count + " selectors");
             //string[] lines = tLines.ToArray();
 
             ResultsList.SelectedIndex = 0;
@@ -296,9 +297,9 @@ namespace NetGopherClient
             //myLines.Clear();
             //foreach (var line in lines)
             //{
-            //    myLines.Add(new gopherLine(line));
+            //    myLines.Add(new GopherLine(line));
             //}
-            if (clientReceivedLines.Count > 0)
+            if (Gopher.ReceivedLines.Count > 0)
             {
                 ResultsList.ScrollIntoView(ResultsList.Items[0]);
             }
@@ -339,7 +340,7 @@ namespace NetGopherClient
             return String.Format("{0} {1}", Len, suffixes[s]);
         }
 
-        private void DownloadFile(gopherLine g, string tFileName)
+        private void DownloadFile(GopherLine g, string tFileName)
         {
             ResultsList.IsEnabled = false;
 
@@ -354,7 +355,7 @@ namespace NetGopherClient
             catch
             {
                 UpdateStatus("Ready...");
-                MessageBox.Show("Cannot connect to host " + g.TargetServer + " on port " + g.TargetPort);
+                UserInterface.DisplayMessage("Cannot connect to host " + g.TargetServer + " on port " + g.TargetPort);
                 return;
             }
 
@@ -366,7 +367,7 @@ namespace NetGopherClient
             }
             catch
             {
-                MessageBox.Show("I couldnt talk to the host; Network error?");
+                UserInterface.DisplayMessage("I couldnt talk to the host; Network error?");
             }
             string fout = tFileName;
             System.IO.FileStream fs = System.IO.File.Open(fout, System.IO.FileMode.Create);
@@ -413,7 +414,7 @@ namespace NetGopherClient
             string q = ((b.Children[0] as TextBox).Text);
             //MessageBox.Show(q);
 
-            gopherLine gl = (e.OriginalSource as FrameworkElement).DataContext as gopherLine;
+            GopherLine gl = (e.OriginalSource as FrameworkElement).DataContext as GopherLine;
             //navigate(gl.TargetServer, gl.TargetPort, gl.TargetUri + "?" + q);
             // This is really a bit of a hack.
             navigate(
@@ -432,9 +433,9 @@ namespace NetGopherClient
 // OPEN A TEXT FILE.
 
             object q = (e.OriginalSource as FrameworkElement).DataContext;
-            if (q is gopherLine)
+            if (q is GopherLine)
             {
-                gopherLine g = q as gopherLine;
+                GopherLine g = q as GopherLine;
 
                 string tf = GetTempFileName("txt");
                 DownloadFile(g, tf);
@@ -450,9 +451,9 @@ namespace NetGopherClient
         private void GetFile(object sender, RoutedEventArgs e)
         {
             object q = (e.OriginalSource as FrameworkElement).DataContext;
-            if (q is gopherLine)
+            if (q is GopherLine)
             {
-                gopherLine g = q as gopherLine;
+                GopherLine g = q as GopherLine;
 
                 string fName = g.TargetUri.Substring(g.TargetUri.LastIndexOf('/') + 1);
                 string extension = fName.Substring(fName.LastIndexOf('.'));
@@ -475,9 +476,9 @@ namespace NetGopherClient
         private void NavigateToURL(object sender, RoutedEventArgs e)
         {
             object q = (e.OriginalSource as FrameworkElement).DataContext;
-            if (q is gopherLine)
+            if (q is GopherLine)
             {
-                gopherLine g = q as gopherLine;
+                GopherLine g = q as GopherLine;
                 // we need to find the proper means and way of doing things.
                 // We want to make sure that there's some kind of HTTP:// in the uri
 
@@ -505,9 +506,9 @@ namespace NetGopherClient
         private void ChangeDirectory(object sender, RoutedEventArgs e)
         {
             object q = (e.OriginalSource as FrameworkElement).DataContext;
-            if (q is gopherLine)
+            if (q is GopherLine)
             {
-                gopherLine g = q as gopherLine;
+                GopherLine g = q as GopherLine;
 
                 if (!g.TargetUri.StartsWith("/"))
                     // Target URIs must be absolute given the server. I've read the GOPHER spec a few times over and still havent found anything for "relative" selectors.
@@ -530,7 +531,7 @@ namespace NetGopherClient
 
     public struct download_item
     {
-        public gopherLine from_source;
+        public GopherLine from_source;
         public string target;
     }
 }

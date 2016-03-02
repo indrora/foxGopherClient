@@ -13,23 +13,18 @@ namespace NetGopherClient
         public string GopherServer { get; set; }
         public int GopherPort { get; set; }
 
-        private ObservableCollection<gopherLine> _menu;
-
         private IUserInterface _userInterface;
 
-        public GopherClient(ref ObservableCollection<gopherLine> menu, IUserInterface userInterface)
+        public ObservableCollection<GopherLine> ReceivedLines { get; } 
+        public GopherClient(IUserInterface userInterface)
         {
             if (userInterface == null)
             {
                 throw new ArgumentNullException("userInterface is null.");
             }
 
-            if (menu == null)
-            {
-                throw new ArgumentNullException("menu is null");
-            }
-
-            _menu = menu;
+            ReceivedLines = new ObservableCollection<GopherLine>();
+            
             _userInterface = userInterface;
         }
 
