@@ -7,7 +7,7 @@
     x:Class="NetGopherClient.NetGopherClientWindow"
     Title=".NET Gopher Client"
     Loaded="WindowLoad"
-    x:Name="wind" Height="640" Width="720" Icon="/NetGopherClient;component/Icons/GANTIcon.png" ResizeMode="CanResizeWithGrip">
+    x:Name="wind" Height="768" Width="1024" Icon="/NetGopherClient;component/Icons/GANTIcon.png" ResizeMode="CanResizeWithGrip">
 
 
     <NavigationWindow.Resources>
@@ -348,7 +348,7 @@
                               HorizontalAlignment="Stretch" Margin="0,5,0,5"
                               Name="browserLocation" Text="" Width="Auto" ItemsSource="{Binding}" />
                     <StackPanel Orientation="Horizontal" Grid.Column="3">
-                        <Button Grid.Column="3" Margin="5,5,5,5" Click="Button_Click">
+                        <Button x:Name="NavigateToBrowserLocation" Grid.Column="3" Margin="5,5,5,5" Click="Button_Click">
                             <Image Source="Icons\ExternalServer.png" Height="16" />
                         </Button>
                         <ToggleButton Name="BookmarkButton">Bookmark</ToggleButton>

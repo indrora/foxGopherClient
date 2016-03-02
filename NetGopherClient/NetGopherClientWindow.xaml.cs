@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 
 namespace NetGopherClient
 {
@@ -14,24 +17,24 @@ namespace NetGopherClient
     /// </summary>
     public partial class NetGopherClientWindow : NavigationWindow
     {
-        #region DWM Stuff
+        //#region DWM Stuff
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MARGINS
-        {
-            public int cxLeftWidth; // width of left border that retains its size
-            public int cxRightWidth; // width of right border that retains its size
-            public int cyTopHeight; // height of top border that retains its size
-            public int cyBottomHeight; // height of bottom border that retains its size
-        };
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct MARGINS
+        //{
+        //    public int cxLeftWidth; // width of left border that retains its size
+        //    public int cxRightWidth; // width of right border that retains its size
+        //    public int cyTopHeight; // height of top border that retains its size
+        //    public int cyBottomHeight; // height of bottom border that retains its size
+        //};
 
 
-        [DllImport("DwmApi.dll")]
-        public static extern int DwmExtendFrameIntoClientArea(
-            IntPtr hwnd,
-            ref MARGINS pMarInset);
+        //[DllImport("DwmApi.dll")]
+        //public static extern int DwmExtendFrameIntoClientArea(
+        //    IntPtr hwnd,
+        //    ref MARGINS pMarInset);
 
-        #endregion
+        //#endregion
 
         System.Collections.ObjectModel.ObservableCollection<gopherLine> myLines =
             new System.Collections.ObjectModel.ObservableCollection<gopherLine>();
@@ -54,43 +57,56 @@ namespace NetGopherClient
 
         private void WindowLoad(object Sender, RoutedEventArgs e)
         {
-            try
+            string homeUrl = ConfigurationManager.AppSettings["HomeUrl"];
+
+            if (!String.IsNullOrWhiteSpace(homeUrl) && homeUrl.Contains("gopher://"))
             {
-                // handle loading the DWM Stuff.
-                IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
-                HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
-                mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
-                System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
-                float DesktopDpiX = desktop.DpiX;
-                float DesktopDpiY = desktop.DpiY;
+                browserLocation.Text = homeUrl;
 
-                MARGINS margins = new MARGINS();
-
-                margins.cxLeftWidth = Convert.ToInt32(0*(DesktopDpiX/96));
-                margins.cxRightWidth = Convert.ToInt32(0*(DesktopDpiX/96));
-                margins.cyTopHeight =
-                    Convert.ToInt32(((int) navBar.ActualHeight + navBar.Margin.Bottom + 1)*(DesktopDpiX/96));
-                margins.cyBottomHeight = Convert.ToInt32(sBar.ActualHeight*(DesktopDpiX/96));
-
-                int hr = DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
-                //
-                if (hr < 0)
-                {
-                    //DwmExtendFrameIntoClientArea Failed
-                    MessageBox.Show("I was unable to make DwmExtendFrameIntoClientArea work!");
-                }
-                else
-                {
-                    this.Background = Brushes.Transparent;
-                    navBar.Background = Brushes.Transparent;
-                    sBar.Background = Brushes.Transparent;
-                    //MessageBox.Show("DWMExtendFrameINtoClientArea Succeeded");
-                }
+                // Invoke button automation for NavigateToBrowserLocation
+                ButtonAutomationPeer peer = new ButtonAutomationPeer(NavigateToBrowserLocation);
+                IInvokeProvider invokeProvider = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+                invokeProvider.Invoke();
             }
-            catch
-            {
-                // We should ignore DWM stuff...
-            }
+
+
+            //try
+            //{
+            //    // handle loading the DWM Stuff.
+            //    IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
+            //    HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+            //    mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+            //    System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
+            //    float DesktopDpiX = desktop.DpiX;
+            //    float DesktopDpiY = desktop.DpiY;
+
+            //    MARGINS margins = new MARGINS();
+
+            //    margins.cxLeftWidth = Convert.ToInt32(0*(DesktopDpiX/96));
+            //    margins.cxRightWidth = Convert.ToInt32(0*(DesktopDpiX/96));
+            //    margins.cyTopHeight =
+            //        Convert.ToInt32(((int) navBar.ActualHeight + navBar.Margin.Bottom + 1)*(DesktopDpiX/96));
+            //    margins.cyBottomHeight = Convert.ToInt32(sBar.ActualHeight*(DesktopDpiX/96));
+
+            //    int hr = DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
+            //    //
+            //    if (hr < 0)
+            //    {
+            //        //DwmExtendFrameIntoClientArea Failed
+            //        MessageBox.Show("I was unable to make DwmExtendFrameIntoClientArea work!");
+            //    }
+            //    else
+            //    {
+            //        this.Background = Brushes.Transparent;
+            //        navBar.Background = Brushes.Transparent;
+            //        sBar.Background = Brushes.Transparent;
+            //        //MessageBox.Show("DWMExtendFrameINtoClientArea Succeeded");
+            //    }
+            //}
+            //catch
+            //{
+            //    // We should ignore DWM stuff...
+            //}
         }
 
         #endregion
@@ -171,7 +187,7 @@ namespace NetGopherClient
                 this.NavigationService.AddBackEntry(new GopherNavState(cLocation));
             }
             browserLocation.Text = ur.GetLeftPart(UriPartial.Query);
-            this.Title = "Fox " + ur.GetLeftPart(UriPartial.Query);
+            this.Title = ".NET Gopher Client: " + ur.GetLeftPart(UriPartial.Query);
 
             System.Net.Sockets.TcpClient tcpC = null;
             myLines.Clear();
