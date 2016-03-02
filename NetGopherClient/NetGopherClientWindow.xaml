@@ -7,8 +7,7 @@
     x:Class="NetGopherClient.NetGopherClientWindow"
     Title=".NET Gopher Client"
     Loaded="WindowLoad"
-    x:Name="wind" Height="512" Width="768" Icon="/NetGopherClient;component/Icons/GANTIcon.png"
-    SizeToContent="WidthAndHeight" ResizeMode="CanResizeWithGrip">
+    x:Name="wind" Height="640" Width="720" Icon="/NetGopherClient;component/Icons/GANTIcon.png" ResizeMode="CanResizeWithGrip">
 
 
     <NavigationWindow.Resources>
