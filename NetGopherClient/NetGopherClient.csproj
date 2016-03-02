@@ -131,7 +131,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientSettings.cs" />
+    <Compile Include="GopherClientSettings.cs" />
     <Compile Include="gopherLIneTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
