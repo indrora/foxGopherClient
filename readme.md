@@ -1,7 +1,10 @@
-ForkedFoxGopherClient: original readme.md below \/
+NetGopherClient 
 ===============
+About
+---------------
+NetGopherClient is a fork of FoxGopherClient to bring it up to the latest in .NET toolchain.
 
-FoxGopherClient
+original readme.md from FoxGopherClient:
 ===============
 
 A simple client for the GOPHER:// protocol.
