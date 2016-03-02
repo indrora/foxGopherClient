@@ -2,7 +2,7 @@ NetGopherClient
 ===============
 About
 ---------------
-NetGopherClient is a fork of FoxGopherClient to bring it up to the latest in .NET toolchain.
+NetGopherClient is a fork of foxGopherClient to bring it up to the latest in .NET toolchain.
 
 original readme.md from foxGopherClient:
 ===============
