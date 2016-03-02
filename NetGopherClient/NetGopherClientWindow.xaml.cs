@@ -7,27 +7,22 @@ using System.Windows.Navigation;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 
-namespace foxGopherClient
+namespace NetGopherClient
 {
-
-
-
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for NetGopherClient.xaml
     /// </summary>
-    public partial class Window1 : NavigationWindow
+    public partial class NetGopherClientWindow : NavigationWindow
     {
-
-
         #region DWM Stuff
 
         [StructLayout(LayoutKind.Sequential)]
         public struct MARGINS
         {
-            public int cxLeftWidth;      // width of left border that retains its size
-            public int cxRightWidth;     // width of right border that retains its size
-            public int cyTopHeight;      // height of top border that retains its size
-            public int cyBottomHeight;   // height of bottom border that retains its size
+            public int cxLeftWidth; // width of left border that retains its size
+            public int cxRightWidth; // width of right border that retains its size
+            public int cyTopHeight; // height of top border that retains its size
+            public int cyBottomHeight; // height of bottom border that retains its size
         };
 
 
@@ -38,14 +33,16 @@ namespace foxGopherClient
 
         #endregion
 
-        System.Collections.ObjectModel.ObservableCollection<gopherLine> myLines = new System.Collections.ObjectModel.ObservableCollection<gopherLine>();
+        System.Collections.ObjectModel.ObservableCollection<gopherLine> myLines =
+            new System.Collections.ObjectModel.ObservableCollection<gopherLine>();
+
         string cLocation = "";
 
         List<String> bookmarks = new List<string>();
 
         #region Init Stuff
 
-        public Window1()
+        public NetGopherClientWindow()
         {
             InitializeComponent();
 
@@ -53,9 +50,6 @@ namespace foxGopherClient
 
 
             ResultsList.DataContext = myLines;
-
-
-
         }
 
         private void WindowLoad(object Sender, RoutedEventArgs e)
@@ -72,10 +66,11 @@ namespace foxGopherClient
 
                 MARGINS margins = new MARGINS();
 
-                margins.cxLeftWidth = Convert.ToInt32(0 * (DesktopDpiX / 96));
-                margins.cxRightWidth = Convert.ToInt32(0 * (DesktopDpiX / 96));
-                margins.cyTopHeight = Convert.ToInt32(((int)navBar.ActualHeight + navBar.Margin.Bottom + 1) * (DesktopDpiX / 96));
-                margins.cyBottomHeight = Convert.ToInt32(sBar.ActualHeight * (DesktopDpiX / 96));
+                margins.cxLeftWidth = Convert.ToInt32(0*(DesktopDpiX/96));
+                margins.cxRightWidth = Convert.ToInt32(0*(DesktopDpiX/96));
+                margins.cyTopHeight =
+                    Convert.ToInt32(((int) navBar.ActualHeight + navBar.Margin.Bottom + 1)*(DesktopDpiX/96));
+                margins.cyBottomHeight = Convert.ToInt32(sBar.ActualHeight*(DesktopDpiX/96));
 
                 int hr = DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
                 //
@@ -89,7 +84,7 @@ namespace foxGopherClient
                     this.Background = Brushes.Transparent;
                     navBar.Background = Brushes.Transparent;
                     sBar.Background = Brushes.Transparent;
-                    MessageBox.Show("DWMExtendFrameINtoClientArea Succeeded");
+                    //MessageBox.Show("DWMExtendFrameINtoClientArea Succeeded");
                 }
             }
             catch
@@ -107,37 +102,40 @@ namespace foxGopherClient
             try
             {
                 /* if (e.NavigationMode ==  NavigationMode.Back ) { */
-                e.ContentStateToSave = new GopherNavState(cLocation);// }
-                if (e.NavigationMode != NavigationMode.Refresh) { navigate((e.TargetContentState as GopherNavState).tLocation, false); }
-                else if (e.NavigationMode == NavigationMode.Refresh) { navigate(cLocation, false); }
-
-
-
+                e.ContentStateToSave = new GopherNavState(cLocation); // }
+                if (e.NavigationMode != NavigationMode.Refresh)
+                {
+                    navigate((e.TargetContentState as GopherNavState).tLocation, false);
+                }
+                else if (e.NavigationMode == NavigationMode.Refresh)
+                {
+                    navigate(cLocation, false);
+                }
             }
             catch
             {
                 // Something bad happened. Ignore it for the moment.
             }
         }
+
         #endregion
-
-
-
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Title = "Fox";
+            this.Title = "NetGopherClient";
             navigate(browserLocation.Text, true);
 
             //gopherLine gl = new gopherLine(@"1Initial server request: " + browserLocation.Text);
-
         }
 
         #region Internal navigation function
 
         private void navigate(string Location, bool make_back_url)
         {
-            if (Location == "") { return; }
+            if (Location == "")
+            {
+                return;
+            }
 
             StatusLabel.Content = "";
             // we're going to make sure the beginning has gopher:// before it. 
@@ -151,22 +149,26 @@ namespace foxGopherClient
                     MessageBox.Show("Invalid URI Scheme. Try Gopher:// instead");
                 }
                 Location = "gopher://" + Location;
-
             }
 
             // use the Uri object to parse it out. 
 
             Uri ur;
-            try { ur = new Uri(Location); }
-            catch { MessageBox.Show("Invalid location!"); return; }
+            try
+            {
+                ur = new Uri(Location);
+            }
+            catch
+            {
+                MessageBox.Show("Invalid location!");
+                return;
+            }
 
             //if (ur.Scheme != Uri.UriSchemeGopher) { MessageBox.Show("I dont know how to process that URL. Try a Gopher URI."); return; } 
 
             if (cLocation != "" && make_back_url)
             {
-
                 this.NavigationService.AddBackEntry(new GopherNavState(cLocation));
-
             }
             browserLocation.Text = ur.GetLeftPart(UriPartial.Query);
             this.Title = "Fox " + ur.GetLeftPart(UriPartial.Query);
@@ -176,7 +178,6 @@ namespace foxGopherClient
             Refresh(this);
 
 
-           
             Refresh(this);
             System.Net.IPAddress[] addresses;
             try
@@ -185,7 +186,7 @@ namespace foxGopherClient
 
                 if (addresses.Length == 0)
                 {
-                   // myLines.Add(new gopherLine("3Could not look up host...\terror\terror.host\t0"));
+                    // myLines.Add(new gopherLine("3Could not look up host...\terror\terror.host\t0"));
                     StatusLabel.Content = "Host not found";
                     return;
                 }
@@ -199,7 +200,10 @@ namespace foxGopherClient
 
             //myLines.Add(new gopherLine("iEstablishing connection to host...\terror\terror.host\t0")); Refresh(this);
             StatusLabel.Content = "Connecting to " + ur.DnsSafeHost;
-            try { tcpC = new System.Net.Sockets.TcpClient(ur.DnsSafeHost, ur.Port); }
+            try
+            {
+                tcpC = new System.Net.Sockets.TcpClient(ur.DnsSafeHost, ur.Port);
+            }
             catch
             {
                 //myLines.Add(new gopherLine("3Could not connect to host...\terror\terror.host\t0")); Refresh(this);
@@ -210,10 +214,9 @@ namespace foxGopherClient
             System.Net.Sockets.NetworkStream ConnStream = tcpC.GetStream();
             if (ConnStream.CanWrite == false)
             {
-               // myLines.Add(new gopherLine("3Unable to use connection stream... network error?\terror\terror.host\t0")); Refresh(this);
+                // myLines.Add(new gopherLine("3Unable to use connection stream... network error?\terror\terror.host\t0")); Refresh(this);
                 StatusLabel.Content = "Unable to connect";
                 return;
-
             }
             // We need to write our resource locator, then keep going. 
             byte[] EncodedResource;
@@ -276,11 +279,9 @@ namespace foxGopherClient
             {
                 ResultsList.ScrollIntoView(ResultsList.Items[0]);
             }
-
         }
 
         #endregion
-
 
         #region File Download Functions
 
@@ -291,7 +292,6 @@ namespace foxGopherClient
         /// <returns></returns>
         private string getTempFileName(string extention)
         {
-
             string k = System.IO.Path.GetTempFileName();
             string kn = k.Substring(0, k.LastIndexOf(".") + 1) + extention;
             System.IO.File.Move(k, kn);
@@ -305,12 +305,12 @@ namespace foxGopherClient
         /// <returns></returns>
         private string getHumanReadableSize(float Len)
         {
-            string[] suffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+            string[] suffixes = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
             int s = 0;
             while (Len >= 1024 && s < suffixes.Length - 1)
             {
                 s++;
-                Len = Len / 1024.0f;
+                Len = Len/1024.0f;
             }
 
             return String.Format("{0} {1}", Len, suffixes[s]);
@@ -318,7 +318,6 @@ namespace foxGopherClient
 
         private void DownloadFile(gopherLine g, string tFileName)
         {
-
             ResultsList.IsEnabled = false;
 
 
@@ -328,7 +327,6 @@ namespace foxGopherClient
             try
             {
                 tc.Connect(g.TargetServer, g.TargetPort);
-
             }
             catch
             {
@@ -340,15 +338,12 @@ namespace foxGopherClient
             System.Net.Sockets.NetworkStream ts = tc.GetStream();
             try
             {
-
                 byte[] b = System.Text.Encoding.ASCII.GetBytes(g.TargetUri + "\n");
                 ts.Write(b, 0, b.Length);
-
             }
             catch
             {
                 MessageBox.Show("I couldnt talk to the host; Network error?");
-
             }
             string fout = tFileName;
             System.IO.FileStream fs = System.IO.File.Open(fout, System.IO.FileMode.Create);
@@ -356,15 +351,22 @@ namespace foxGopherClient
             do
             {
                 Refresh(this);
-                byte[] buf = new byte[2 ^ 8]; Refresh(this);
-                num = ts.Read(buf, 0, buf.Length); Refresh(this);
-                if (num == 0) { break; } Refresh(this);
-                Array.Resize(ref buf, num); Refresh(this);
-                fs.Write(buf, 0, num); Refresh(this);
+                byte[] buf = new byte[2 ^ 8];
+                Refresh(this);
+                num = ts.Read(buf, 0, buf.Length);
+                Refresh(this);
+                if (num == 0)
+                {
+                    break;
+                }
+                Refresh(this);
+                Array.Resize(ref buf, num);
+                Refresh(this);
+                fs.Write(buf, 0, num);
+                Refresh(this);
                 StatusLabel.Content = "Downloading... " + getHumanReadableSize(fs.Position);
                 Refresh(this);
-            }
-            while (num > 0);
+            } while (num > 0);
             StatusLabel.Content = "Downloaded " + getHumanReadableSize(fs.Length);
 
             fs.Close();
@@ -391,10 +393,10 @@ namespace foxGopherClient
             gopherLine gl = (e.OriginalSource as FrameworkElement).DataContext as gopherLine;
             //navigate(gl.TargetServer, gl.TargetPort, gl.TargetUri + "?" + q);
             // This is really a bit of a hack.
-            navigate(String.Format("gopher://{0}{1}?{2}", (gl.TargetPort != 70 ? gl.TargetServer + ":" + gl.TargetPort : gl.TargetServer), gl.TargetUri, q), true);
-
-
-
+            navigate(
+                String.Format("gopher://{0}{1}?{2}",
+                    (gl.TargetPort != 70 ? gl.TargetServer + ":" + gl.TargetPort : gl.TargetServer), gl.TargetUri, q),
+                true);
         }
 
         /// <summary>
@@ -403,7 +405,8 @@ namespace foxGopherClient
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void openFile(object sender, RoutedEventArgs e)
-        {// OPEN A TEXT FILE.
+        {
+// OPEN A TEXT FILE.
 
             object q = (e.OriginalSource as FrameworkElement).DataContext;
             if (q is gopherLine)
@@ -414,8 +417,6 @@ namespace foxGopherClient
                 DownloadFile(g, tf);
                 System.Diagnostics.Process.Start(tf);
             }
-
-
         }
 
         /// <summary>
@@ -457,12 +458,12 @@ namespace foxGopherClient
                 // we need to find the proper means and way of doing things.
                 // We want to make sure that there's some kind of HTTP:// in the uri
 
-                if (g.TargetUri.ToLower().StartsWith("url:") || g.TargetUri.ToLower().StartsWith("/url:")) /* the second is because some gopher+ servers dont handle url: selectors normally */
+                if (g.TargetUri.ToLower().StartsWith("url:") || g.TargetUri.ToLower().StartsWith("/url:"))
+                    /* the second is because some gopher+ servers dont handle url: selectors normally */
                 {
                     // we just need to figure out where the HTTP is, substr that out and go
                     string tURL = g.TargetUri.Substring(g.TargetUri.IndexOf("http"));
                     System.Diagnostics.Process.Start(tURL);
-
                 }
                 else
                 {
@@ -485,34 +486,38 @@ namespace foxGopherClient
             {
                 gopherLine g = q as gopherLine;
 
-                if (!g.TargetUri.StartsWith("/")) // Target URIs must be absolute given the server. I've read the GOPHER spec a few times over and still havent found anything for "relative" selectors.
+                if (!g.TargetUri.StartsWith("/"))
+                    // Target URIs must be absolute given the server. I've read the GOPHER spec a few times over and still havent found anything for "relative" selectors.
                 {
                     g.TargetUri = "/" + g.TargetUri;
                 }
 
-                navigate(String.Format("gopher://{0}{1}", (g.TargetPort != 70 ? g.TargetServer + ":" + g.TargetPort : g.TargetServer), g.TargetUri), true);
-
+                navigate(
+                    String.Format("gopher://{0}{1}",
+                        (g.TargetPort != 70 ? g.TargetServer + ":" + g.TargetPort : g.TargetServer), g.TargetUri), true);
             }
-
         }
+
         #endregion
 
         #region Refresh the UI code
+
         // Used to refresh
         private delegate void NoArgDelegate();
+
         //Used as a refresher. 
         public static void Refresh(DependencyObject obj)
         {
             obj.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Input,
-                (NoArgDelegate)delegate { });
+                (NoArgDelegate) delegate { });
         }
+
         #endregion
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("TODO: Implement printing");
         }
-
     }
 
     public struct download_item
@@ -520,9 +525,9 @@ namespace foxGopherClient
         public gopherLine from_source;
         public string target;
     }
+
     public class GopherClient
     {
-
         public string GopherURI { get; set; }
         public string GopherServer { get; set; }
         public int GopherPort { get; set; }

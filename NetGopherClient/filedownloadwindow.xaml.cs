@@ -11,14 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace foxGopherClient
+namespace NetGopherClient
 {
     /// <summary>
-    /// Interaction logic for filedownloadwindow.xaml
+    /// Interaction logic for FileDownloadWindow.xaml
     /// </summary>
-    public partial class filedownloadwindow : Window
+    public partial class FileDownloadWindow : Window
     {
-        public filedownloadwindow()
+        public FileDownloadWindow()
         {
             InitializeComponent();
         }

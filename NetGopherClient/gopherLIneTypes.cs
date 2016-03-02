@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +6,10 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Navigation;
 
-namespace foxGopherClient
+namespace NetGopherClient
 {
-
     public class GopherLineSelector : DataTemplateSelector
     {
-
         public DataTemplate InfoTemplate { get; set; }
         public DataTemplate DirectoryTemplate { get; set; }
         public DataTemplate ErrorTemplate { get; set; }
@@ -38,7 +34,6 @@ namespace foxGopherClient
             {
                 try
                 {
-
                     switch ((item as gopherLine).LineType)
                     {
                         case gopherLine.GopherLineType.Info:
@@ -75,7 +70,6 @@ namespace foxGopherClient
                         case gopherLine.GopherLineType.WebLink:
                             return UrlTemplate;
                     }
-
                 }
                 catch
                 {
@@ -84,11 +78,10 @@ namespace foxGopherClient
             }
             return base.SelectTemplate(item, container);
         }
-
     }
+
     public class gopherLine
     {
-
         public enum GopherLineType
         {
             Info,
@@ -113,7 +106,9 @@ namespace foxGopherClient
         /// <summary>
         /// DO NOT USE. USED ONLY FOR DESIGN TIME ITEMS.
         /// </summary>
-        public gopherLine() { }
+        public gopherLine()
+        {
+        }
 
         public GopherLineType LineType { get; set; }
         public string LineText { get; set; }
@@ -121,14 +116,18 @@ namespace foxGopherClient
         public string TargetUri { get; set; }
         public Int16 TargetPort { get; set; }
         char TypeChar;
+
         public Uri HyperLinkURI
         {
             get
             {
-                Uri u = new Uri("gopher://" + TargetServer + ":" + TargetPort + (TargetUri.StartsWith("/") ? TargetUri : "/" + TargetUri));
+                Uri u =
+                    new Uri("gopher://" + TargetServer + ":" + TargetPort +
+                            (TargetUri.StartsWith("/") ? TargetUri : "/" + TargetUri));
                 return u;
             }
         }
+
         public gopherLine(string Line)
         {
             // this isnt reccomended practice, but its what we have to do.
@@ -137,10 +136,13 @@ namespace foxGopherClient
                 return;
             }
 
-            string[] blocks = Line.Split(new char[] { '\t' });
+            string[] blocks = Line.Split(new char[] {'\t'});
             // we know we're going to have 4 items: Text (with 1 item before it), a location, a server and a port.
 
-            if (blocks[0] == "") { return; }
+            if (blocks[0] == "")
+            {
+                return;
+            }
 
             char type = blocks[0][0];
             TypeChar = type;
@@ -201,7 +203,6 @@ namespace foxGopherClient
 
             if (LineType != GopherLineType.Info)
             {
-
                 if (blocks.Length > 1) // Info lines do NOT have to conform.
                 {
                     TargetUri = blocks[1];
@@ -216,27 +217,25 @@ namespace foxGopherClient
                     TargetPort = 0;
                 }
             }
-
-
-
         }
-
 
 
         public override string ToString()
         {
             return "<" + TypeChar + "> " + LineText + " [ " + LineType + " =>" + TargetUri + " ]";
         }
-
     }
 
     [Serializable]
     public class GopherNavState : CustomContentState
     {
-
         public String tLocation { get; set; }
         private String _qq;
-        public override String JournalEntryName { get { return _qq; } }
+
+        public override String JournalEntryName
+        {
+            get { return _qq; }
+        }
 
         public GopherNavState(string Location)
         {
@@ -245,7 +244,6 @@ namespace foxGopherClient
 
         public override void Replay(NavigationService navigationService, NavigationMode mode)
         {
-
             _qq = tLocation;
         }
     }
