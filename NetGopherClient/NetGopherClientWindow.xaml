@@ -7,7 +7,7 @@
     x:Class="NetGopherClient.NetGopherClientWindow"
     Title=".NET Gopher Client"
     Loaded="WindowLoad"
-    x:Name="wind" Height="768" Width="1024" Icon="/NetGopherClient;component/Icons/GANTIcon.png" ResizeMode="CanResizeWithGrip">
+    x:Name="MainNetGopherClientWindow" Height="768" Width="1024" Icon="/NetGopherClient;component/Icons/GANTIcon.png" ResizeMode="CanResizeWithGrip">
 
 
     <NavigationWindow.Resources>
@@ -161,7 +161,7 @@
 
         <!-- Directory line -->
         <DataTemplate x:Key="GopherDirectory">
-            <Button Click="changeDirectory" HorizontalAlignment="Left" Width="Auto" Margin="16,0,16,0">
+            <Button Click="ChangeDirectory" HorizontalAlignment="Left" Width="Auto" Margin="16,0,16,0">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Icons\folder.png" />
                     <Label Content="{Binding LineText}" />
@@ -182,7 +182,7 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="Icons\textfile.png" />
                 <TextBlock Text="{Binding LineText}" />
-                <Button Height="16" Click="openFile">
+                <Button Height="16" Click="OpenFile">
                     <Image Source="Icons\view.png" />
                 </Button>
             </StackPanel>
@@ -213,7 +213,7 @@
                     <Label Content="{Binding LineText}" />
                     <StackPanel Orientation="Horizontal">
                         <TextBox Name="PART_querybox" Width="200" />
-                        <Button Click="indexSubmit">
+                        <Button Click="IndexSubmit">
                             <TextBlock>Submit</TextBlock>
                         </Button>
                     </StackPanel>
@@ -226,7 +226,7 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="Icons\application_xp_terminal.png" />
                 <TextBlock Text="{Binding LineText}" />
-                <Button Height="16" Click="openFile">
+                <Button Height="16" Click="OpenFile">
                     <Image Source="Icons\view.png" />
                 </Button>
             </StackPanel>
@@ -237,7 +237,7 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="Icons\page_bin.png" />
                 <TextBlock Margin="5,0,5,0" Text="{Binding LineText}" />
-                <Button Click="getFile">
+                <Button Click="GetFile">
                     <StackPanel Orientation="Horizontal">
                         <Image Height="16" Source="Icons\page_white_get.png" /><Label>Download</Label>
                     </StackPanel>
@@ -249,7 +249,7 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="Icons\image.png" />
                 <TextBlock Text="{Binding LineText}" />
-                <Button Height="16" Click="getFile">
+                <Button Height="16" Click="GetFile">
                     <Image Source="Icons\page_white_get.png" />
                 </Button>
             </StackPanel>
@@ -263,7 +263,7 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="Icons\world_link.png" Height="16" />
                 <TextBlock Text="{Binding LineText}" />
-                <Button Click="goURL">
+                <Button Click="NavigateToURL">
                     Open
                 </Button>
             </StackPanel>
@@ -346,7 +346,7 @@
                     </Grid>
                     <ComboBox Grid.Column="2" IsEditable="True"
                               HorizontalAlignment="Stretch" Margin="0,5,0,5"
-                              Name="browserLocation" Text="" Width="Auto" ItemsSource="{Binding}" />
+                              Name="NavigationURL" Text="" Width="Auto" ItemsSource="{Binding}" />
                     <StackPanel Orientation="Horizontal" Grid.Column="3">
                         <Button x:Name="NavigateToBrowserLocation" Grid.Column="3" Margin="5,5,5,5" Click="Button_Click">
                             <Image Source="Icons\ExternalServer.png" Height="16" />

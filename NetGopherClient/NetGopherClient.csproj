@@ -127,6 +127,8 @@
     <Compile Include="FileDownloadWindow.xaml.cs">
       <DependentUpon>FileDownloadWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GopherClient.cs" />
+    <Compile Include="IUserInterface.cs" />
     <Compile Include="NetGopherClientWindow.xaml.cs">
       <DependentUpon>NetGopherClientWindow.xaml</DependentUpon>
     </Compile>
