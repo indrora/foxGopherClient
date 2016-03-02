@@ -2,9 +2,12 @@ NetGopherClient
 ===============
 About
 ---------------
-NetGopherClient is a fork of NetGopherClient to bring it up to the latest in .NET toolchain.
+NetGopherClient is a fork of FoxGopherClient to bring it up to the latest in .NET toolchain.
 
-original readme.md from NetGopherClient:
+original readme.md from foxGopherClient:
+===============
+
+FoxGopherClient
 ===============
 
 A simple client for the GOPHER:// protocol.
@@ -44,4 +47,4 @@ The code is all in vanilla .NET 3.5 (C# 3) and should compile on anything that c
 Remarks
 -------
 
-This is *really* bad code for the most part. It pulls mean tricks with the WPF visual helpers at times (see the function <code>IndexSubmit</code> in NetGopherClient.xaml.cs ) and occasionally doesn't do any form of documentation. It makes lots of assumptions about the format of files and generally doesn't make many allowances for the horrible things some servers do.
+This is *really* bad code for the most part. It pulls mean tricks with the WPF visual helpers at times (see the function <code>IndexSubmit</code> in Window1.xaml.cs ) and occasionally doesn't do any form of documentation. It makes lots of assumptions about the format of files and generally doesn't make many allowances for the horrible things some servers do.
