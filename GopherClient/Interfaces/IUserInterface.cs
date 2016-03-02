@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetGopherClient
+namespace NetGopherClient.Gopher
 {
     public interface IUserInterface
     {
@@ -13,5 +13,13 @@ namespace NetGopherClient
         void DisplayMessage(string text, string title = "Alert");
 
         bool RequestYesNo(string text, string title = "Alert");
+
+        void RefreshInterface();
+
+        void UpdateNavigationUrl(Uri uri, bool trackBackUrl);
+
+        void ResetScroll();
+
+        void OnNavigationComplete();
     }
 }

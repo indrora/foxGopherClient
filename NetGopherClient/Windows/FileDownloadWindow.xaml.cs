@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace NetGopherClient
+namespace NetGopherClient.Desktop
 {
     /// <summary>
     /// Interaction logic for FileDownloadWindow.xaml

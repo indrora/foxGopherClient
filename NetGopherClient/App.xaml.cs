@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace NetGopherClient
+namespace NetGopherClient.Desktop
 {
     /// <summary>
     /// Interaction logic for App.xaml
