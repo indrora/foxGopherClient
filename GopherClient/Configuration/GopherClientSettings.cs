@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NetGopherClient.Gopher
 {
-    class ClientSettings
+    internal class ClientSettings
     {
-        public string textFileViewer { get; set; }
+        #region Fields and Properties
+
+        public List<string> Bookmarks { get; set; }
 
         public bool ChangeLineEncodings { get; set; }
+        public string textFileViewer { get; set; }
 
         public bool useAltDowloadForTextFiles { get; set; }
 
-        public List<String> Bookmarks { get; set; }
+        #endregion
     }
 }

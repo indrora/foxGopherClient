@@ -1,68 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetGopherClient.Gopher
 {
     public class GopherLine
     {
-        public enum GopherLineType
-        {
-            Info,
-            File,
-            Directory,
-            PhoneBook,
-            Error,
-            BinHex,
-            DosBinary,
-            UUEncoded,
-            IndexSearch,
-            Telnet,
-            Binary,
-            RendundantServer,
-            SessionPointer,
-            GIF,
-            GenericImage,
-            WebLink,
-            UnknownType
-        }
+        #region Fields and Properties
 
-        /// <summary>
-        /// DO NOT USE. USED ONLY FOR DESIGN TIME ITEMS.
-        /// </summary>
-        public GopherLine()
-        {
-        }
+        private readonly char _typeChar;
 
-        public GopherLineType LineType { get; set; }
-        public string LineText { get; set; }
-        public string TargetServer { get; set; }
-        public string TargetUri { get; set; }
-        public Int16 TargetPort { get; set; }
-        char TypeChar;
+        #endregion
 
-        public Uri HyperLinkURI
+        #region Fields and Properties
+
+        public Uri HyperLinkUri
         {
             get
             {
-                Uri u =
+                var u =
                     new Uri("gopher://" + TargetServer + ":" + TargetPort +
                             (TargetUri.StartsWith("/") ? TargetUri : "/" + TargetUri));
                 return u;
             }
         }
 
-        public GopherLine(string Line)
+        public string LineText { get; set; }
+
+        public GopherLineType LineType { get; set; }
+        public short TargetPort { get; set; }
+        public string TargetServer { get; set; }
+        public string TargetUri { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        ///     DO NOT USE. USED ONLY FOR DESIGN TIME ITEMS.
+        /// </summary>
+        public GopherLine() { }
+
+        public GopherLine(string line)
         {
             // this isnt reccomended practice, but its what we have to do.
-            if (Line == "." || Line == "")
+            if (line == "." || line == "")
             {
                 return;
             }
 
-            string[] blocks = Line.Split(new char[] { '\t' });
+            var blocks = line.Split('\t');
+
             // we know we're going to have 4 items: Text (with 1 item before it), a location, a server and a port.
 
             if (blocks[0] == "")
@@ -70,8 +56,8 @@ namespace NetGopherClient.Gopher
                 return;
             }
 
-            char type = blocks[0][0];
-            TypeChar = type;
+            var type = blocks[0][0];
+            _typeChar = type;
             switch (type)
             {
                 case 'i':
@@ -133,11 +119,11 @@ namespace NetGopherClient.Gopher
                 {
                     TargetUri = blocks[1];
                     TargetServer = blocks[2];
-                    TargetPort = Int16.Parse(blocks[3]);
+                    TargetPort = short.Parse(blocks[3]);
                 }
                 else
                 {
-                    this.LineType = GopherLineType.Error;
+                    LineType = GopherLineType.Error;
                     TargetUri = "";
                     TargetServer = "";
                     TargetPort = 0;
@@ -145,10 +131,40 @@ namespace NetGopherClient.Gopher
             }
         }
 
+        #endregion
+
+        #region Public access
+
+        public enum GopherLineType
+        {
+            Info,
+            File,
+            Directory,
+            PhoneBook,
+            Error,
+            BinHex,
+            DosBinary,
+            UUEncoded,
+            IndexSearch,
+            Telnet,
+            Binary,
+            RendundantServer,
+            SessionPointer,
+            GIF,
+            GenericImage,
+            WebLink,
+            UnknownType
+        }
+
+        #endregion
+
+        #region Public access
 
         public override string ToString()
         {
-            return "<" + TypeChar + "> " + LineText + " [ " + LineType + " =>" + TargetUri + " ]";
+            return "<" + _typeChar + "> " + LineText + " [ " + LineType + " =>" + TargetUri + " ]";
         }
+
+        #endregion
     }
 }

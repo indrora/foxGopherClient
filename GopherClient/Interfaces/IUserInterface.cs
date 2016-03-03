@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetGopherClient.Gopher
 {
     public interface IUserInterface
     {
-        void UpdateStatus(string text);
+        #region Public access
 
         void DisplayMessage(string text, string title = "Alert");
 
-        bool RequestYesNo(string text, string title = "Alert");
+        void OnNavigationComplete();
 
         void RefreshInterface();
 
-        void UpdateNavigationUrl(Uri uri, bool trackBackUrl);
+        bool RequestYesNo(string text, string title = "Alert");
 
         void ResetScroll();
 
-        void OnNavigationComplete();
+        void UpdateNavigationUrl(Uri uri, bool trackBackUrl);
+        void UpdateStatus(string text);
+
+        #endregion
     }
 }
