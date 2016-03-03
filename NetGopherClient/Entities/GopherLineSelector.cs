@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using NetGopherClient.Gopher;
 
@@ -11,23 +6,29 @@ namespace NetGopherClient.Desktop
 {
     public class GopherLineSelector : DataTemplateSelector
     {
-        public DataTemplate InfoTemplate { get; set; }
+        #region Fields and Properties
+
+        public DataTemplate BinaryTemplate { get; set; }
+        public DataTemplate BinHexTemplate { get; set; }
         public DataTemplate DirectoryTemplate { get; set; }
+        public DataTemplate DosBinTemplate { get; set; }
+        public DataTemplate DupeServerTemplate { get; set; }
         public DataTemplate ErrorTemplate { get; set; }
-        public DataTemplate TextTemplate { get; set; }
+        public DataTemplate ImageTemplate { get; set; }
+        public DataTemplate IndexSvrTemplate { get; set; }
+        public DataTemplate InfoTemplate { get; set; }
         public DataTemplate MenuTemplate { get; set; }
         public DataTemplate PhoneTemplate { get; set; }
-        public DataTemplate BinHexTemplate { get; set; }
-        public DataTemplate DosBinTemplate { get; set; }
-        public DataTemplate UUETemplate { get; set; }
-        public DataTemplate IndexSvrTemplate { get; set; }
-        public DataTemplate TelnetTemplate { get; set; }
-        public DataTemplate BinaryTemplate { get; set; }
-        public DataTemplate DupeServerTemplate { get; set; }
-        public DataTemplate ImageTemplate { get; set; }
-        public DataTemplate UnknownTemplate { get; set; }
         public DataTemplate SessionTemplate { get; set; }
+        public DataTemplate TelnetTemplate { get; set; }
+        public DataTemplate TextTemplate { get; set; }
+        public DataTemplate UnknownTemplate { get; set; }
         public DataTemplate UrlTemplate { get; set; }
+        public DataTemplate UUETemplate { get; set; }
+
+        #endregion
+
+        #region Public access
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -79,5 +80,7 @@ namespace NetGopherClient.Desktop
             }
             return base.SelectTemplate(item, container);
         }
+
+        #endregion
     }
 }

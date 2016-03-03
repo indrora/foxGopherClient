@@ -1,32 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Navigation;
-using NetGopherClient.Gopher;
 
 namespace NetGopherClient.Desktop
 {
     [Serializable]
     public class GopherNavState : CustomContentState
     {
-        public String tLocation { get; set; }
-        private String _qq;
+        #region Fields and Properties
 
-        public override String JournalEntryName
-        {
-            get { return _qq; }
-        }
+        private string _qq;
+
+        #endregion
+
+        #region Fields and Properties
+
+        public override string JournalEntryName => _qq;
+
+        public string tLocation { get; set; }
+
+        #endregion
+
+        #region Constructors
 
         public GopherNavState(string Location)
         {
             tLocation = Location;
         }
 
+        #endregion
+
+        #region Public access
+
         public override void Replay(NavigationService navigationService, NavigationMode mode)
         {
             _qq = tLocation;
         }
+
+        #endregion
     }
 }

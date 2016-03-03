@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace NetGopherClient.Desktop
 {
     /// <summary>
-    /// Interaction logic for FileDownloadWindow.xaml
+    ///     Interaction logic for FileDownloadWindow.xaml
     /// </summary>
     public partial class FileDownloadWindow : Window
     {
+        #region Constructors
+
         public FileDownloadWindow()
         {
             InitializeComponent();
         }
+
+        #endregion
     }
 }

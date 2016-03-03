@@ -6,20 +6,20 @@
     x:Class="NetGopherClient.Desktop.NetGopherClientWindow"
     Title=".NET Gopher Client"
     Loaded="WindowLoad"
-    x:Name="MainNetGopherClientWindow" 
-    Height="768" 
-    Width="1024" 
-    Icon="/NetGopherClient;component/Icons/GANTIcon.png" 
+    x:Name="MainNetGopherClientWindow"
+    Height="768"
+    Width="1024"
+    Icon="/NetGopherClient;component/Icons/GANTIcon.png"
     ResizeMode="CanResizeWithGrip">
 
 
     <NavigationWindow.Resources>
 
 
-        <Style TargetType="{x:Type Button}" x:Key="NavButton" x:Name="NavButton">
+        <Style TargetType="{x:Type Button}" x:Key="NavButton">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Focusable" Value="False" />
-            <Setter Property="Control.Template">
+            <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid Background="#00FFFFFF" Width="24" Height="24">
@@ -166,7 +166,7 @@
         <DataTemplate x:Key="GopherDirectory">
             <Button Click="ChangeDirectory" HorizontalAlignment="Left" Width="Auto" Margin="16,0,16,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="..\Icons\folder.png" />
+                    <Image Source="/NetGopherClient;component/Icons/folder.png" />
                     <Label Content="{Binding LineText}" />
                 </StackPanel>
             </Button>
@@ -176,17 +176,17 @@
         <!-- Menu Entry -->
         <DataTemplate x:Key="GopherMenuEntry">
             <StackPanel Orientation="Horizontal">
-                <Image Source="\Icons\menuEntry.png" />
+                <Image Source="/NetGopherClient;component/Icons/menuEntry.png" />
                 <TextBlock Text="{Binding LineText}" />
             </StackPanel>
         </DataTemplate>
         <!-- Text File -->
         <DataTemplate x:Key="GopherFileText">
             <StackPanel Orientation="Horizontal">
-                <Image Source="\Icons\textfile.png" />
+                <Image Source="/NetGopherClient;component/Icons/textfile.png" />
                 <TextBlock Text="{Binding LineText}" />
                 <Button Height="16" Click="OpenFile">
-                    <Image Source="\Icons/view.png" />
+                    <Image Source="/NetGopherClient;component/Icons/view.png" />
                 </Button>
             </StackPanel>
         </DataTemplate>
@@ -194,14 +194,14 @@
         <!-- Phone Book Entry -->
         <DataTemplate x:Key="GopherPhoneBook">
             <StackPanel Orientation="Horizontal">
-                <Image Source="\Icons\phone.png" />
+                <Image Source="/NetGopherClient;component/Icons/phone.png" />
                 <TextBlock Text="{Binding LineText}" />
             </StackPanel>
         </DataTemplate>
         <!-- Error Happened -->
         <DataTemplate x:Key="GopherError">
             <StackPanel Orientation="Horizontal">
-                <Image Source="/Icons/bomb.png" />
+                <Image Source="/NetGopherClient;component/Icons/bomb.png" />
                 <TextBlock Text="{Binding LineText}" />
             </StackPanel>
         </DataTemplate>
@@ -227,10 +227,10 @@
 
         <DataTemplate x:Key="GopherTelnet">
             <StackPanel Orientation="Horizontal">
-                <Image Source="\Icons\application_xp_terminal.png" />
+                <Image Source="/NetGopherClient;component/Icons/application_xp_terminal.png" />
                 <TextBlock Text="{Binding LineText}" />
                 <Button Height="16" Click="OpenFile">
-                    <Image Source="..\Icons\view.png" />
+                    <Image Source="/NetGopherClient;component/Icons/view.png" />
                 </Button>
             </StackPanel>
         </DataTemplate>
@@ -238,11 +238,12 @@
         <!-- Binary file (of some sort) -->
         <DataTemplate x:Key="GopherBinaryFile">
             <StackPanel Orientation="Horizontal">
-                <Image Source="\Icons\page_bin.png" />
+                <Image Source="/NetGopherClient;component/Icons/page_bin.png" />
                 <TextBlock Margin="5,0,5,0" Text="{Binding LineText}" />
                 <Button Click="GetFile">
                     <StackPanel Orientation="Horizontal">
-                        <Image Height="16" Source="\Icons\page_white_get.png" /><Label>Download</Label>
+                        <Image Height="16" Source="/NetGopherClient;component/Icons/page_white_get.png" />
+                        <Label>Download</Label>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -250,10 +251,10 @@
         <!-- Image (Generic) -->
         <DataTemplate x:Key="GopherImage">
             <StackPanel Orientation="Horizontal">
-                <Image Source="\Icons\image.png" />
+                <Image Source="/NetGopherClient;component/Icons/page_bin.png" />
                 <TextBlock Text="{Binding LineText}" />
                 <Button Height="16" Click="GetFile">
-                    <Image Source="\Icons\page_white_get.png" />
+                    <Image Source="/NetGopherClient;component/Icons/page_white_get.png" />
                 </Button>
             </StackPanel>
         </DataTemplate>
@@ -264,9 +265,9 @@
         <DataTemplate x:Key="GopherUrl">
 
             <StackPanel Orientation="Horizontal">
-                <Image Source="Icons/world_link.png" Height="16" />
+                <Image Source="/NetGopherClient;component/Icons/world_link.png" Height="16" />
                 <TextBlock Text="{Binding LineText}" />
-                <Button Click="NavigateToURL">
+                <Button Click="NavigateToUrl">
                     Open
                 </Button>
             </StackPanel>
@@ -349,13 +350,15 @@
                     </Grid>
                     <ComboBox Grid.Column="2" IsEditable="True"
                               HorizontalAlignment="Stretch" Margin="0,5,0,5"
-                              Name="NavigationURL" Text="" Width="Auto" ItemsSource="{Binding}" KeyUp="NavigationURL_KeyUp" />
+                              Name="NavigationURL" Text="" Width="Auto" ItemsSource="{Binding}"
+                              KeyUp="NavigationURL_KeyUp" />
                     <StackPanel Orientation="Horizontal" Grid.Column="3">
-                        <Button x:Name="NavigateToBrowserLocation" Grid.Column="3" Margin="5,5,5,5" Click="Button_Click">
-                            <Image Source="\Icons\ExternalServer.png" Height="16" />
+                        <Button x:Name="NavigateToBrowserLocation" Grid.Column="3" Margin="5,5,5,5"
+                                Click="GoButtonClick">
+                            <Image Source="/NetGopherClient;component/Icons/ExternalServer.png" Height="16" />
                         </Button>
                         <ToggleButton Name="BookmarkButton">Bookmark</ToggleButton>
-                        <Button Click="Button_Click_1">Print</Button>
+                        <Button Click="OnPrintButtonClick">Print</Button>
                     </StackPanel>
 
                 </Grid>
@@ -369,13 +372,13 @@
                 <StatusBar Name="sBar" Grid.Row="2">
                     <StatusBarItem HorizontalAlignment="Stretch" Width="Auto">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Icons/information.png" />
+                            <Image Source="/Icons/information.png" />
                             <Label Name="StatusLabel">Ready...</Label>
                         </StackPanel>
                     </StatusBarItem>
                     <StatusBarItem Width="Auto">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Icons/information.png" />
+                            <Image Source="/Icons/information.png" />
                             <Label Name="DownloadStatus">Downloads [0/0]</Label>
                         </StackPanel>
                     </StatusBarItem>
