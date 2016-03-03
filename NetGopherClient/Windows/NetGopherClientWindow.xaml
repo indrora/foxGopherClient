@@ -157,7 +157,7 @@
         <!-- Normal info line -->
         <DataTemplate x:Key="GopherInfoLine">
             <StackPanel Orientation="Horizontal">
-                <Image Source="../Icons/information.png" />
+                <!--<Image Source="../Icons/information.png" />-->
                 <TextBlock Text="{Binding LineText}" />
             </StackPanel>
         </DataTemplate>
