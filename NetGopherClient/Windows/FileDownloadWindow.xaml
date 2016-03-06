@@ -1,4 +1,4 @@
-﻿<Window x:Class="foxGopherClient.filedownloadwindow"
+﻿<Window x:Class="NetGopherClient.Desktop.FileDownloadWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="File Download" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Width="476" Height="171">
@@ -21,11 +21,11 @@
             <Button Grid.Column="2">Close</Button>
             <Button Grid.Column="3">Open</Button>
             <Button Grid.Column="4">Save (Move)</Button>
-            <Label Grid.Column="5"></Label>
+            <Label Grid.Column="5" />
         </Grid>
         <AdornerDecorator>
             <Label>Download Location: xxxx</Label>
         </AdornerDecorator>
-        
+
     </StackPanel>
 </Window>

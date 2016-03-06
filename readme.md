@@ -1,3 +1,25 @@
+NetGopherClient 
+===============
+About
+---------------
+NetGopherClient is a fork of foxGopherClient to bring it up to the latest in .NET toolchain.
+
+TODO
+----
+* Implement FileDownloadWindow
+* Add Configuration class
+* Add menu with settings
+* Implement bookmarks
+* Clean up themes
+* Review the TCP code
+* Package for distribution
+* Replace ResultsList with rendered view
+* ...
+
+
+original readme.md from foxGopherClient:
+===============
+
 FoxGopherClient
 ===============
 
